@@ -86,25 +86,19 @@
 
 
 
-
-/* Try instantiating a new AudioContext, throw an error if it fails. */
-
-
-var listener = new THREE.AudioListener();
-camera.add(listener);
-
-var sound = new TREE.Audio(listener);
-  
-var audioLoader = new THREE.AudioLoader();
+var direction = new SoundBH("./sound2.mp3", 16);
 
 
-audioLoader.load( 'sound2.mp3', function( buffer ) 
-{
-  sound.setBuffer( buffer );
-  sound.setLoop( true );
-  sound.setVolume( 0.5 );
-  sound.play();
-});
+
+audio_file.onchange = function(){
+  Sound.change(URL.createObjectURL(this.files[0]));
+  console.log("changed!!")
+};
+
+playBut.onclick = function(){Sound.play();};
+pauseBut.onclick = function(){Sound.pause();};
+
+
 
 
 
@@ -225,9 +219,40 @@ audioLoader.load( 'sound2.mp3', function( buffer )
   
 
 
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+    document.addEventListener('mousedowm', onDocumentMouseDown, false);
+
+    function onDocumentMouseDown(event) {
+      event.preventDefault();
+      mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+      mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+    }
+    raycaster.setFromCamera (mouse, camera);
+    var intersects = raycaster.intersectObjects (toDrag);
+
+    if (intersects.lenght > 0) {
+      intersects [0].object.rotation.x -=1;
+      intersects [0].object.rotation.y -=1;
+    
+      if(intersects[0].object.name == "mesh1"){
+        Sound.change("sound1.mp3");
+        speed1 = 0.04; speed2 = 0.01; speed3 = 0.01;}
+        else if (intersects[0].object.name == "mesh2"){
+        Sound.change("sound2.mp3");
+        speed1 = 0.01; speed2 = 0.04; speed3 = 0.01;}
+        else if (intersects[0].object.name == "mesh3"){
+        Sound.change("sound3.mp3");
+        speed1 = 0.01; speed2 = 0.01; speed3 = 0.04;
+      }
+    }
+  }
 
 
 
+  var speed1 = 0.01;
+  var speed2 = 0.01;
+  var speed3 = 0.01;
 
 
     //mousemove
@@ -314,31 +339,11 @@ $(document).ready(function(){
 
 
 
-    // Pause / play audio on page click
-    document.body.addEventListener('click', function(ev) {
-  if (audio) {
-    if (audio.paused()) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
 
   var windowHalfX = window.innerWidth / 2;
   var windowHalfY = window.innerHeight / 2;
+
+
   function onWindowResize() {
     windowHalfX = window.innerWidth / 2;
     windowHalfY = window.innerHeight / 2;
