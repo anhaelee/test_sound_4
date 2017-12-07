@@ -90,9 +90,7 @@ jQuery(document).ready(function($) {
     var Sound = new SoundBH("./sound2.mp3",16);
 
    
-    playBut.onclick = function(){ Sound.play();};  
-    pauseBut.onclick = function(){ Sound.pause();};
-
+  
 // visualization code
 
 const CUBES_NUM = 70;
@@ -259,6 +257,18 @@ var floorGeometry = new THREE.PlaneGeometry( 80000, 80000, 100, 100 );
 
     render();
 
+  
+  
+  $(document).ready(function(){
+    $(".point").click(function(){
+        $(".load").animate({opacity: '0'});
+        $(".load").animate({top: '-100%'});
+    });
+});
+
+  
+  
+  
   var windowHalfX = window.innerWidth / 2;
   var windowHalfY = window.innerHeight / 2;
   
